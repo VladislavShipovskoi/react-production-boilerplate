@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  web-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: react-app-prod
+    ports:
+      - '80:80'
+    restart: always
+    environment:
+      - NODE_ENV=production

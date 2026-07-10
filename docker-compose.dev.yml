@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  web-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: react-app-dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/app # Монтируем всю локальную папку в контейнер
+      - /app/node_modules # Исключаем node_modules из монтирования (чтобы использовать модули контейнера)
+    environment:
+      - NODE_ENV=development
+      # Включаем опрос файлов для стабильной работы горячей перезагрузки (HMR) в Docker на Windows/macOS
+      - CHOKIDAR_USEPOLLING=true
+    stdin_open: true # Нужно для интерактивного режима Webpack Dev Server
+    tty: true
