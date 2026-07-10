@@ -11,7 +11,7 @@ This boilerplate avoids the black-box abstraction of Create React App (CRA) and 
 * **Git Hooks:** Husky + lint-staged (Prevents bad commits)
 * **Testing:** Jest + React Testing Library (Pre-configured for DOM testing and asset mocking)
 * **Containerization:** Docker (Multi-stage build with Nginx for ultra-lightweight images)
-* **CI/CD:** GitHub Actions (Automated linting, testing, and build checks on push/PR)
+* **CI/CD:** GitHub Actions (Automated linting, testing, build checks, and SSH deployment)
 
 ## 🚀 Quick Start
 
@@ -69,6 +69,45 @@ docker-compose -f docker-compose.prod.yml up -d --build
 ```bash
 docker-compose -f docker-compose.prod.yml down
 ```
+
+---
+
+## 🌐 CI/CD & Continuous Deployment (CD) Setup
+
+The project is pre-configured with a fully automated deployment pipeline inside `.github/workflows/deploy.yml`. 
+Every time you push code to the `main` branch, GitHub Actions will:
+1. Run ESLint checks and Jest unit tests.
+2. Build a production Docker image and push it to **Docker Hub**.
+3. Establish a secure **SSH connection** to your remote VPS server.
+4. Pull the newly created image, stop the old container, and start the updated one on port `8080` (or your chosen port).
+
+### 🔑 Configuration Steps
+
+#### 1. Configure GitHub Secrets
+Go to your GitHub Repository ➔ **Settings** ➔ **Secrets and variables** ➔ **Actions** ➔ **New repository secret** and add the following variables:
+
+| Secret Name | Description | Example / Format |
+| :--- | :--- | :--- |
+| `SSH_HOST` | Your remote VPS IP address | `192.168.1.100` |
+| `SSH_USERNAME` | SSH login user on the VPS | `root` or `deploy` |
+| `SSH_PRIVATE_KEY` | The **private** SSH key (content of `~/.ssh/id_rsa`) | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
+| `DOCKER_HUB_USERNAME` | Your Docker Hub account username | `yourusername` |
+| `DOCKER_HUB_TOKEN` | Docker Hub Access Token (PAT) | `dckr_pat_...` |
+
+#### 2. Prepare Your VPS Server
+SSH into your remote server and install Docker if it is not already installed:
+
+```bash
+# Update and install Docker
+sudo apt-get update
+sudo apt-get install docker.io -y
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# (Optional) Allow running Docker without sudo
+sudo usermod -aG docker $USER
+```
+Once configured, pushing code to the `main` branch will automatically deploy your application to your server within minutes!
 
 ---
 
