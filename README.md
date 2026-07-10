@@ -15,7 +15,7 @@ This boilerplate avoids the black-box abstraction of Create React App (CRA) and 
 
 ## 🚀 Quick Start
 
-Ensure you have [Node.js](https://nodejs.org/) (v18+) and/or [Docker](https://www.docker.com/) installed.
+Ensure you have [Node.js](https://nodejs.org/) (v24+) and/or [Docker](https://www.docker.com/) installed.
 
 ### 1. Project Initialization
 
