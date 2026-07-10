@@ -8,11 +8,11 @@ services:
     ports:
       - '3000:3000'
     volumes:
-      - .:/app # Монтируем всю локальную папку в контейнер
-      - /app/node_modules # Исключаем node_modules из монтирования (чтобы использовать модули контейнера)
+      - .:/app # Mounts the entire local folder into the container
+      - /app/node_modules # Excludes node_modules from mounting (to use container modules)
     environment:
       - NODE_ENV=development
-      # Включаем опрос файлов для стабильной работы горячей перезагрузки (HMR) в Docker на Windows/macOS
+      # Enables file polling for stable Hot Module Replacement (HMR) in Docker on Windows/macOS
       - CHOKIDAR_USEPOLLING=true
-    stdin_open: true # Нужно для интерактивного режима Webpack Dev Server
+    stdin_open: true # Necessary for interactive Webpack Dev Server
     tty: true
