@@ -49,7 +49,7 @@ Use this mode if you don't want to install Node.js locally. Your code changes wi
 
 ```bash
 # Start development container (auto-rebuilds image on config changes)
-docker-compose -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yml up --build
 ```
 
 👉 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -57,7 +57,7 @@ docker-compose -f docker-compose.dev.yml up --build
 _To stop the dev container:_
 
 ```bash
-docker-compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yml down
 ```
 
 ---
@@ -68,7 +68,7 @@ Use this mode to test how your application will run on a real production server.
 
 ```bash
 # Build and run production container in the background (detached mode)
-docker-compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yml up -d --build
 ```
 
 👉 Open [http://localhost](http://localhost) (or `http://localhost:80`) in your browser.
@@ -76,7 +76,7 @@ docker-compose -f docker-compose.prod.yml up -d --build
 _To stop the production container:_
 
 ```bash
-docker-compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yml down
 ```
 
 ---
