@@ -5,6 +5,12 @@
     "node": true,
     "jest": true
   },
+  "ignorePatterns": [
+    "webpack.config.js",
+    "jest.config.js",
+    "dist/",
+    "node_modules/"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
