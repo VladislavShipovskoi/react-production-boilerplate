@@ -83,6 +83,8 @@ docker-compose -f docker-compose.prod.yml down
 
 ## 🌐 CI/CD & Continuous Deployment (CD) Setup
 
+> ⚠️ **Note on Template Safety:** Automatic deployment is **disabled by default** to prevent failing builds on GitHub before you configure your secrets. It is configured for manual trigger (`workflow_dispatch`) by default.
+
 The project is pre-configured with a fully automated deployment pipeline inside `.github/workflows/deploy.yml`.
 Every time you push code to the `main` branch, GitHub Actions will:
 
@@ -119,6 +121,16 @@ sudo systemctl enable docker
 # (Optional) Allow running Docker without sudo
 sudo usermod -aG docker $USER
 ```
+#### 3. Activate Automatic Deployment
+To enable automatic deployment on every push to the `main` branch:
+1. Open `.github/workflows/deploy.yml`.
+2. Uncomment the `push` block at the top of the file:
+   ```yaml
+   on:
+     push:
+       branches: [ "main" ]
+   ```
+3. Commit and push this change to your repository.
 
 Once configured, pushing code to the `main` branch will automatically deploy your application to your server within minutes!
 
