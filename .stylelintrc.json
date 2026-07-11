@@ -1,0 +1,15 @@
+{
+  "extends": [
+    "stylelint-config-standard-scss",
+    "stylelint-config-recess-order",
+    "stylelint-prettier/recommended"
+  ],
+  "rules": {
+    "selector-class-pattern": "^[a-z][a-zA-Z0-9_-]+$",
+    "property-no-vendor-prefix": true,
+    "value-no-vendor-prefix": true,
+    "font-family-name-quotes": "always-where-recommended",
+    "max-nesting-depth": 4,
+    "no-empty-source": null
+  }
+}
