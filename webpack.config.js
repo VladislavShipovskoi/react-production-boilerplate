@@ -3,6 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Dotenv = require('dotenv-webpack');
+const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = (env, argv) => {
   const isProduction = argv.mode === 'production';
@@ -69,6 +71,35 @@ module.exports = (env, argv) => {
           ]
         : []),
     ],
+    optimization: {
+      minimize: isProduction,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            format: {
+              comments: false,
+            },
+            compress: {
+              drop_console: true,
+              drop_debugger: true,
+            },
+          },
+          extractComments: false,
+        }),
+        new CssMinimizerPlugin(),
+      ],
+      runtimeChunk: 'single',
+      splitChunks: {
+        chunks: 'all',
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+          },
+        },
+      },
+    },
     devServer: {
       port: 3000,
       hot: true,
