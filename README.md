@@ -5,24 +5,35 @@ This boilerplate avoids the black-box abstraction of Create React App (CRA) and 
 
 ## 🛠 Tech Stack & Features
 
-- **Core:** React 18 + TypeScript (v6)
+- **Core:** React 18 + TypeScript (v6) with modern `"moduleResolution": "bundler"`
 - **Bundler:** Webpack 5 + Babel (Highly optimized, modular configuration)
-- **Code Quality:** ESLint (v8) + Prettier (Strict rules with auto-formatting & Windows CRLF safety)
+- **Path Aliases:** Clean imports using virtual `@/*` mapped to `src/*` to avoid relative path hell (`../../../../`)
+- **Code Quality:**
+  - ESLint (v8) + Prettier (Strict rules with auto-formatting & Windows CRLF safety)
+  - Stylelint + recess-order (Strict SCSS linting & automatic properties sorting based on Twitter/Bootstrap guidelines)
 - **Git Hooks:** Husky + lint-staged (Prevents bad commits)
+- **Production Optimizations:**
+  - Advanced code splitting (`splitChunks`) and runtime chunking to separate node_modules from source code
+  - JS Minification via **Terser** (strips all `console.log`, `debugger`, and comments in production)
+  - CSS Minification via **CssMinimizerPlugin**
+- **Environment Variables:** Safe client-side injection via `dotenv-webpack` and `.env.example`
 - **Testing:** Jest + React Testing Library (Pre-configured for DOM testing and asset mocking)
 - **Containerization:** Docker (Multi-stage build with Nginx for ultra-lightweight images)
 - **CI/CD:** GitHub Actions (Automated linting, testing, build checks, and SSH deployment)
 
 ## 🚀 Quick Start
 
-Ensure you have [Node.js](https://nodejs.org/) (v24+) and/or [Docker](https://www.docker.com/) installed.
+Ensure you have [Node.js](https://nodejs.org/) (v18+) and/or [Docker](https://www.docker.com/) installed.
 
-### 1. Project Initialization
+### 1. Project Initialization & Setup
 
 ```bash
 # Clone the repository (or download template)
 git clone https://github.com/your-username/react-production-boilerplate.git my-app
 cd my-app
+
+# Create your local environment file from the template
+cp .env.example .env
 ```
 
 ---
@@ -83,17 +94,11 @@ docker compose -f docker-compose.prod.yml down
 
 ## 🌐 CI/CD & Continuous Deployment (CD) Setup
 
+The project is pre-configured with an automated deployment pipeline inside `.github/workflows/deploy.yml`.
+
 > ⚠️ **Note on Template Safety:** Automatic deployment is **disabled by default** to prevent failing builds on GitHub before you configure your secrets. It is configured for manual trigger (`workflow_dispatch`) by default.
 
-The project is pre-configured with a fully automated deployment pipeline inside `.github/workflows/deploy.yml`.
-Every time you push code to the `main` branch, GitHub Actions will:
-
-1. Run ESLint checks and Jest unit tests.
-2. Build a production Docker image and push it to **Docker Hub**.
-3. Establish a secure **SSH connection** to your remote VPS server.
-4. Pull the newly created image, stop the old container, and start the updated one on port `8080` (or your chosen port).
-
-### 🔑 Configuration Steps
+### 🔑 Configuration & Activation Steps
 
 #### 1. Configure GitHub Secrets
 
@@ -135,19 +140,29 @@ To enable automatic deployment on every push to the `main` branch:
    ```
 3. Commit and push this change to your repository.
 
-Once configured, pushing code to the `main` branch will automatically deploy your application to your server within minutes!
-
 ---
 
 ## 🧪 Other Utility Commands
 
-- **Run Linting & Formatting:**
+- **Run All Linting & Formatting:**
 
   ```bash
   npm run lint
   ```
 
-  _(Checks and automatically fixes styling/linting errors using ESLint & Prettier)_
+  _(Simultaneously runs ESLint for JS/TS and Stylelint for SCSS files with auto-fixing)_
+
+- **Run JS/TS Linting Only:**
+
+  ```bash
+  npm run lint:code
+  ```
+
+- **Run SCSS Linting & Sorting Only:**
+
+  ```bash
+  npm run lint:style
+  ```
 
 - **Run Tests:**
 
@@ -170,4 +185,4 @@ Once configured, pushing code to the `main` branch will automatically deploy you
 We maintain a strict quality gate to prevent broken code from reaching the main branch:
 
 1. **Local Commit:** Husky blocks commits via `lint-staged` if your code has unresolved linting/formatting issues.
-2. **Pull Request:** GitHub Actions runs ESLint, Jest tests, and a production build. The PR cannot be merged if any check fails.
+2. **Pull Request:** GitHub Actions runs ESLint, Stylelint, Jest tests, and a production build. The PR cannot be merged if any check fails.
