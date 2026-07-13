@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "sourceMap": true,
     "paths": {
-      "src/*": ["./src/*"]
+      "@/*": ["./src/*"]
     },
     "types": ["react", "node", "webpack-env"]
   },

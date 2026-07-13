@@ -16,7 +16,12 @@ module.exports = (env, argv) => {
       assetModuleFilename: 'assets/[hash][ext][query]',
       publicPath: '/',
     },
-    resolve: { extensions: ['.tsx', '.ts', '.js'] },
+    resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+      alias: {
+        '@': path.resolve(__dirname, 'src'),
+      },
+    },
     module: {
       rules: [
         {
