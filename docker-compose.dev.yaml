@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   web-dev:
     build:
@@ -12,7 +11,9 @@ services:
       - /app/node_modules # Excludes node_modules from mounting (to use container modules)
     environment:
       - NODE_ENV=development
-      # Enables file polling for stable Hot Module Replacement (HMR) in Docker on Windows/macOS
+      # Poll Webpack modules across Docker bind mounts on Windows/macOS
+      - WATCHPACK_POLLING=1000
+      # Poll static files watched by webpack-dev-server
       - CHOKIDAR_USEPOLLING=true
     stdin_open: true # Necessary for interactive Webpack Dev Server
     tty: true

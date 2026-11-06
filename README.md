@@ -58,7 +58,7 @@ npm start
 
 ### 3. Development inside Docker (With HMR)
 
-Use this mode if you don't want to install Node.js locally. Your code changes will still update the page instantly thanks to volume mapping and file polling.
+Use this mode if you don't want to install Node.js locally. Source changes are detected through the bind mount using Webpack polling (`WATCHPACK_POLLING=true`, every second). The dev server listens on `0.0.0.0` so it is reachable through the published port.
 
 ```bash
 # Start development container (auto-rebuilds image on config changes)
