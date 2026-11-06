@@ -21,8 +21,8 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["react", "node", "webpack-env"]
+    "types": ["react", "node", "jest"]
   },
-  "files": ["types/index.d.ts"],
+  "files": ["src/custom.d.ts"],
   "include": ["src"]
 }

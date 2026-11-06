@@ -5,8 +5,8 @@ This boilerplate avoids the black-box abstraction of Create React App (CRA) and 
 
 ## 🛠 Tech Stack & Features
 
-- **Core:** React 18 + TypeScript (v6) with modern `"moduleResolution": "bundler"`
-- **Bundler:** Webpack 5 + Babel (Highly optimized, modular configuration)
+- **Core:** React 18.3.1 + React DOM 18.3.1 with matching v18 types + TypeScript (v6) with modern `"moduleResolution": "bundler"`
+- **Bundler:** Webpack 5 + Babel 7 with the automatic JSX runtime; TypeScript checking runs separately
 - **Path Aliases:** Clean imports using virtual `@/*` mapped to `src/*` to avoid relative path hell (`../../../../`)
 - **Code Quality:**
   - ESLint (v8) + Prettier (Strict rules with auto-formatting & Windows CRLF safety)
@@ -19,17 +19,17 @@ This boilerplate avoids the black-box abstraction of Create React App (CRA) and 
 - **Environment Variables:** Safe client-side injection via `dotenv-webpack` and `.env.example`
 - **Testing:** Jest + React Testing Library (Pre-configured for DOM testing and asset mocking)
 - **Containerization:** Docker (Multi-stage build with Nginx for ultra-lightweight images)
-- **CI/CD:** GitHub Actions (Automated linting, testing, build checks, and SSH deployment)
+- **CI/CD:** GitHub Actions (Automated type checking, linting, testing, build checks, and SSH deployment)
 
 ## 🚀 Quick Start
 
-Ensure you have [Node.js](https://nodejs.org/) (v18+) and/or [Docker](https://www.docker.com/) installed.
+Ensure you have [Node.js](https://nodejs.org/) (v24.18.0, matching the Docker images; CI uses 24.x) and/or [Docker](https://www.docker.com/) installed.
 
 ### 1. Project Initialization & Setup
 
 ```bash
 # Clone the repository (or download template)
-git clone https://github.com/your-username/react-production-boilerplate.git my-app
+git clone https://github.com/VladislavShipovskoi/react-production-boilerplate.git my-app
 cd my-app
 
 # Create your local environment file from the template
@@ -38,13 +38,15 @@ cp .env.example .env
 
 ---
 
+For Windows PowerShell, use `Copy-Item .env.example .env` instead of `cp` if needed. If script execution policy blocks `npm.ps1`, run commands with `npm.cmd`.
+
 ### 2. Local Development (Without Docker)
 
 Use this mode if you have Node.js installed locally and want maximum speed.
 
 ```bash
-# Install dependencies
-npm install
+# Install the versions recorded in package-lock.json
+npm ci
 
 # Run development server with Hot Module Replacement (HMR)
 npm start
@@ -60,7 +62,7 @@ Use this mode if you don't want to install Node.js locally. Your code changes wi
 
 ```bash
 # Start development container (auto-rebuilds image on config changes)
-docker compose -f docker-compose.dev.yml up --build
+docker compose -f docker-compose.dev.yaml up --build
 ```
 
 👉 Open [http://localhost:3000](http://localhost:3000) in your browser.
@@ -68,7 +70,7 @@ docker compose -f docker-compose.dev.yml up --build
 _To stop the dev container:_
 
 ```bash
-docker compose -f docker-compose.dev.yml down
+docker compose -f docker-compose.dev.yaml down
 ```
 
 ---
@@ -79,7 +81,7 @@ Use this mode to test how your application will run on a real production server.
 
 ```bash
 # Build and run production container in the background (detached mode)
-docker compose -f docker-compose.prod.yml up -d --build
+docker compose -f docker-compose.prod.yaml up -d --build
 ```
 
 👉 Open [http://localhost](http://localhost) (or `http://localhost:80`) in your browser.
@@ -87,7 +89,7 @@ docker compose -f docker-compose.prod.yml up -d --build
 _To stop the production container:_
 
 ```bash
-docker compose -f docker-compose.prod.yml down
+docker compose -f docker-compose.prod.yaml down
 ```
 
 ---
@@ -150,7 +152,7 @@ To enable automatic deployment on every push to the `main` branch:
   npm run lint
   ```
 
-  _(Simultaneously runs ESLint for JS/TS and Stylelint for SCSS files with auto-fixing)_
+  _(Sequentially runs ESLint for JS/TS and Stylelint for SCSS files with auto-fixing)_
 
 - **Run JS/TS Linting Only:**
 
@@ -164,13 +166,21 @@ To enable automatic deployment on every push to the `main` branch:
   npm run lint:style
   ```
 
+- **Check TypeScript Types:**
+
+  ```bash
+  npm run typecheck
+  ```
+
+  _(Babel removes TypeScript syntax during builds; this separate check validates types.)_
+
 - **Run Tests:**
 
   ```bash
   npm run test
   ```
 
-  _(Runs Jest test suite in watch mode)_
+  _(Runs the Jest test suite once; use `npm test -- --watch` for watch mode)_
 
 - **Manual Build:**
   ```bash
@@ -185,4 +195,4 @@ To enable automatic deployment on every push to the `main` branch:
 We maintain a strict quality gate to prevent broken code from reaching the main branch:
 
 1. **Local Commit:** Husky blocks commits via `lint-staged` if your code has unresolved linting/formatting issues.
-2. **Pull Request:** GitHub Actions runs ESLint, Stylelint, Jest tests, and a production build. The PR cannot be merged if any check fails.
+2. **Pull Request:** GitHub Actions runs TypeScript checking, ESLint, Stylelint, Jest tests, and a production build. Configure branch protection to require these checks before merging.
