@@ -1,5 +1,7 @@
 # 🚀 React Production Boilerplate
 
+[![CI](https://github.com/VladislavShipovskoi/react-production-boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/VladislavShipovskoi/react-production-boilerplate/actions/workflows/ci.yml)
+
 A modern, scalable, and enterprise-ready React application template built from scratch.
 This boilerplate avoids the black-box abstraction of Create React App (CRA) and provides full control over the build process, developer experience, and deployment pipeline.
 
